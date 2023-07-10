@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 /**
  * Складывает два целых числа
@@ -9,6 +9,11 @@
  */
 function abProblem(a, b) {
     // Ваше решение
+    if (typeof a === "number" && typeof b === "number") {
+        return a + b;
+    } else {
+        throw new TypeError("В аргументы переданы не числа!");
+    }
 }
 
 /**
@@ -20,6 +25,15 @@ function abProblem(a, b) {
  */
 function centuryByYearProblem(year) {
     // Ваше решение
+    if (!Number.isInteger(year)) {
+        throw new TypeError("В качестве года передано не целое число!");
+    }
+    if (year < 0) {
+        throw new RangeError("Год не может быть отрицательным числом!");
+    }
+    let century = Math.floor(year / 100) + 1;
+
+    return century;
 }
 
 /**
@@ -31,6 +45,17 @@ function centuryByYearProblem(year) {
  */
 function colorsProblem(hexColor) {
     // Ваше решение
+    if (typeof hexColor === "string") {
+        let numRegExp = /#[a-fA-F0-9]{6}/;
+        if (numRegExp.test(hexColor) && hexColor.length === 7) {
+            let colorRed = parseInt(hexColor.substr(1, 2), 16);
+            let colorGreen = parseInt(hexColor.substr(3, 2), 16);
+            let colorBlue = parseInt(hexColor.substr(5, 2), 16);
+
+            return `(${colorRed}, ${colorGreen}, ${colorBlue})`;
+        } else
+            throw new RangeError("Incorrect input (color values out of range)");
+    } else throw new TypeError("Incorrect input (not a string)");
 }
 
 /**
@@ -42,6 +67,27 @@ function colorsProblem(hexColor) {
  */
 function fibonacciProblem(n) {
     // Ваше решение
+    if (typeof n === "number") {
+        if (Number.isInteger(n) && n > 0) {
+            if (n === 0 || n === 1) {
+                return n;
+            }
+
+            let x = 1,
+                y = 1;
+            let sum;
+
+            for (let i = 1; i < n; i++) {
+                sum = x + y;
+                x = y;
+                y = sum;
+            }
+            return sum;
+        } else
+            throw RangeError(
+                "Incorrect input (not an integer positive number)"
+            );
+    } else throw new TypeError("Incorrect input (not a number)");
 }
 
 /**
@@ -52,6 +98,26 @@ function fibonacciProblem(n) {
  */
 function matrixProblem(matrix) {
     // Ваше решение
+    if (!Array.isArray(matrix)) {
+        throw new TypeError("Transfer not an 2D array");
+    }
+
+    for (let i = 0; i < matrix.length; i++) {
+        if (!Array.isArray(matrix[i])) {
+            throw new TypeError("Transfer not an 2D array");
+        }
+    }
+
+    let newMatrix = [];
+    for (let i = 0; i < matrix.length; i++) {
+        let row = [];
+        for (let j = 0; j < matrix[i].length; j++) {
+            row.push(matrix[j][i]);
+        }
+        newMatrix.push(row);
+    }
+
+    return newMatrix;
 }
 
 /**
@@ -64,6 +130,17 @@ function matrixProblem(matrix) {
  */
 function numberSystemProblem(n, targetNs) {
     // Ваше решение
+    if (
+        typeof n !== "number" ||
+        typeof targetNs !== "number" ||
+        !Number.isInteger(targetNs)
+    ) {
+        throw new TypeError("Incorrect input (not an integer number!)");
+    }
+    if (2 > targetNs || targetNs > 36) {
+        throw new RangeError("radix argument must be between 2 and 36!");
+    }
+    return n.toString(targetNs);
 }
 
 /**
@@ -73,6 +150,10 @@ function numberSystemProblem(n, targetNs) {
  */
 function phoneProblem(phoneNumber) {
     // Ваше решение
+    const template = /^8-800-\d{3}-\d{2}-\d{2}$/;
+    if (typeof phoneNumber === "string") {
+        return template.test(phoneNumber);
+    }
 }
 
 /**
@@ -83,6 +164,14 @@ function phoneProblem(phoneNumber) {
  */
 function smilesProblem(text) {
     // Ваше решение
+    if (typeof text === "string") {
+        let smile = text.match(/(\(-:)|(:-\))/g);
+        let count = 0;
+        if (smile) {
+            count += smile.length;
+        }
+        return count;
+    } else throw new TypeError("Incorrect input (not a string)");
 }
 
 /**
@@ -93,6 +182,21 @@ function smilesProblem(text) {
  */
 function ticTacToeProblem(field) {
     // Ваше решение
+    if (
+        (field[0][0] === field[1][1] && field[0][0] === field[2][2]) ||
+        (field[0][2] === field[1][1] && field[0][2] === field[2][0])
+    ) {
+        return field[1][1];
+    }
+    for (let i = 0; i < 3; i++) {
+        if (field[i][0] === field[i][1] && field[i][0] === field[i][2]) {
+            return field[i][0];
+        }
+        if (field[0][i] === field[1][i] && field[0][i] === field[2][i]) {
+            return field[0][i];
+        }
+    }
+    return "draw";
 }
 
 module.exports = {
@@ -104,5 +208,5 @@ module.exports = {
     numberSystemProblem,
     phoneProblem,
     smilesProblem,
-    ticTacToeProblem
+    ticTacToeProblem,
 };
